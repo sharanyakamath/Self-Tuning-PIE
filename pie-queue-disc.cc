@@ -296,7 +296,7 @@ void PieQueueDisc::CalculateP ()
     {
       m_dropProb = 0;
     }
-    else if (m_stpie)
+  else if (m_stpie)
     {
       // Calculate Capacity
       m_routerBusyTime = 1.0 / m_w;
@@ -307,23 +307,23 @@ void PieQueueDisc::CalculateP ()
 //          m_thc = (2 * m_kc - T) / (2 * m_kc + T) * m_oldThc + T / (2 * m_kc + T) * (m_oldCapacity + m_capacity);
           if (m_thc > 0)
             {
-               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
+              m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
             }
           else
             {
-               m_thc = m_capacity;
+              m_thc = m_capacity;
             }
 
           if (m_dropProb > 0)
             {
               m_nrc = std::sqrt (m_dropProb / 2);
               m_thnrc = (2 * m_knrc - T) / (2 * m_knrc + T) * m_oldThnrc + T / (2 * m_knrc + T) * (m_oldNrc + m_nrc);
-                
+
               double z = 2 * m_thnrc / m_stpieRtt;
               double margin = 1 / m_stpieBeta;
 
               m_kpi = std::sqrt (1 / margin / margin + 1) * 1 / margin * 4 * m_thnrc * m_thnrc / m_stpieRtt / m_stpieRtt / m_thc;
-              
+
               // Calculate values of A and B
               m_a = m_kpi * (1 / z + T / 2);
               m_b = m_kpi * (1 / z - T / 2);
@@ -339,7 +339,7 @@ void PieQueueDisc::CalculateP ()
             }
         }
     }
-  else 
+  else
     {
       p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
       if (m_dropProb < 0.001)
@@ -395,7 +395,7 @@ void PieQueueDisc::CalculateP ()
       m_burstAllowance -= m_tUpdate;
     }
 
-  uint32_t burstResetLimit = static_cast<uint32_t>(BURST_RESET_TIMEOUT / m_tUpdate.GetSeconds ());
+  uint32_t burstResetLimit = static_cast<uint32_t> (BURST_RESET_TIMEOUT / m_tUpdate.GetSeconds ());
   if ( (qDelay.GetSeconds () < 0.5 * m_qDelayRef.GetSeconds ()) && (m_qDelayOld.GetSeconds () < (0.5 * m_qDelayRef.GetSeconds ())) && (m_dropProb == 0) && !missingInitFlag )
     {
       m_dqCount = DQCOUNT_INVALID;
