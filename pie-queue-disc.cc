@@ -92,11 +92,6 @@ TypeId PieQueueDisc::GetTypeId (void)
                    TimeValue (Seconds (0.1)),
                    MakeTimeAccessor (&PieQueueDisc::m_maxBurst),
                    MakeTimeChecker ())
-    .AddAttribute ("W",
-                   "Sampling frequency",
-                   DoubleValue (170),
-                   MakeDoubleAccessor (&PieQueueDisc::m_w),
-                   MakeDoubleChecker<double> ())
     .AddAttribute ("STPIE",
                    "True to use Self tuning PIE",
                    BooleanValue (false),
@@ -299,11 +294,11 @@ void PieQueueDisc::CalculateP ()
   else if (m_stpie)
     {
       // Calculate Capacity
-      m_routerBusyTime = 1.0 / m_w;
-      double T = 1 / m_w;
-      if (m_routerBusyTime > 0)
+      m_routerBusyTime = m_tUpdate;
+      double T = m_tUpdate.GetSeconds();
+      if (m_routerBusyTime.GetSeconds() > 0)
         {
-          m_capacity = double (m_dqCount) / m_routerBusyTime;
+          m_capacity = double (m_dqCount) / m_routerBusyTime.GetSeconds();
 //          m_thc = (2 * m_kc - T) / (2 * m_kc + T) * m_oldThc + T / (2 * m_kc + T) * (m_oldCapacity + m_capacity);
           if (m_thc > 0)
             {
