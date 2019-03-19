@@ -92,6 +92,50 @@ TypeId PieQueueDisc::GetTypeId (void)
                    TimeValue (Seconds (0.1)),
                    MakeTimeAccessor (&PieQueueDisc::m_maxBurst),
                    MakeTimeChecker ())
+    .AddAttribute ("W",
+                   "Sampling frequency",
+                   DoubleValue (170),
+                   MakeDoubleAccessor (&PieQueueDisc::m_w),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("STPIE",
+                   "True to use Self tuning PIE",
+                   BooleanValue (false),
+                   MakeBooleanAccessor (&PieQueueDisc::m_stpie),
+                   MakeBooleanChecker ())
+    .AddAttribute ("Knrc",
+                   "EWMA constant for estimation of N/RC in Self tuning PIE",
+                   DoubleValue (0.0003),
+                   MakeDoubleAccessor (&PieQueueDisc::m_knrc),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("Kc",
+                   "EWMA constant for capacity estimation in Self tuning PIE",
+                   DoubleValue (0.5),
+                   MakeDoubleAccessor (&PieQueueDisc::m_kc),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("Kp",
+                   "Value of Kp",
+                   DoubleValue (0.0001822),
+                   MakeDoubleAccessor (&PieQueueDisc::m_kp),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("Ki",
+                   "Value of Ki",
+                   DoubleValue (0.0001816),
+                   MakeDoubleAccessor (&PieQueueDisc::m_ki),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("StpieBeta",
+                   "Beta used for Self tuning PIE",
+                   DoubleValue (0.5),
+                   MakeDoubleAccessor (&PieQueueDisc::m_stpieBeta),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("StpieRtt",
+                   "RTT used for Self tuning PIE",
+                   DoubleValue (0.018),
+                   MakeDoubleAccessor (&PieQueueDisc::m_stpieRtt),
+                   MakeDoubleChecker<double> ())
+    .AddTraceSource ("Capacity",
+                     "Drop probability of PieQueueDisc",
+                     MakeTraceSourceAccessor (&PieQueueDisc::m_thc),
+                     "ns3::TracedValueCallback::Double")
   ;
 
   return tid;
@@ -252,7 +296,50 @@ void PieQueueDisc::CalculateP ()
     {
       m_dropProb = 0;
     }
-  else
+    else if (m_stpie)
+    {
+      // Calculate Capacity
+      m_routerBusyTime = 1.0 / m_w;
+      double T = 1 / m_w;
+      if (m_routerBusyTime > 0)
+        {
+          m_capacity = double (m_deptBytes) / m_routerBusyTime;
+//          m_thc = (2 * m_kc - T) / (2 * m_kc + T) * m_oldThc + T / (2 * m_kc + T) * (m_oldCapacity + m_capacity);
+          if (m_thc > 0)
+            {
+               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
+            }
+          else
+            {
+               m_thc = m_capacity;
+            }
+
+          if (m_dropProb > 0)
+            {
+              m_nrc = std::sqrt (m_dropProb / 2);
+              m_thnrc = (2 * m_knrc - T) / (2 * m_knrc + T) * m_oldThnrc + T / (2 * m_knrc + T) * (m_oldNrc + m_nrc);
+                
+              double z = 2 * m_thnrc / m_stpieRtt;
+              double margin = 1 / m_stpieBeta;
+
+              m_kpi = std::sqrt (1 / margin / margin + 1) * 1 / margin * 4 * m_thnrc * m_thnrc / m_stpieRtt / m_stpieRtt / m_thc;
+              
+              // Calculate values of A and B
+              m_a = m_kpi * (1 / z + T / 2);
+              m_b = m_kpi * (1 / z - T / 2);
+              //m_aTrace = m_a;
+              //m_bTrace = m_b;
+              p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
+
+              m_oldThc = m_thc;
+              m_oldThnrc = m_thnrc;
+              m_oldNrc = m_nrc;
+              m_deptBytes = 0;
+              //m_dropProb = p;
+            }
+        }
+    }
+  else 
     {
       p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
       if (m_dropProb < 0.001)
