@@ -145,7 +145,6 @@ private:
   double m_stpieRtt;                             //!< RTT used for Self tuning PIE
   double m_knrc;                                //!< EWMA constant for estimation of N/RC in Self tuning PIE
   double m_kc;                                  //!< EWMA constant for capacity estimation in Self tuning PIE
-  double m_w;                                   //!< Sampling frequency (Number of times per second)
   double m_ki;                                  //!< Ki parameter of Self tuning PIE
   double m_kp;                                  //!< Kp parameter of Self tuning PIE
 
@@ -171,7 +170,7 @@ private:
   double m_capacity;                            //!< Sampled capacity in Self tuning PIE
   double m_oldCapacity;                         //!< Old value of sampled capacity in Self tuning PIE
   double m_kpi;
-  double m_routerBusyTime;                      //!< Router's Busy time (required for Self tuning PIE)
+  Time m_routerBusyTime;                      //!< Router's Busy time (required for Self tuning PIE)
 };
 
 }    // namespace ns3
