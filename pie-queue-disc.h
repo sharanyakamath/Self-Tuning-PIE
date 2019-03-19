@@ -129,7 +129,7 @@ private:
    */
   void CalculateP ();
 
-  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max();  //!< Invalid dqCount value
+  static const uint64_t DQCOUNT_INVALID = std::numeric_limits<uint64_t>::max ();  //!< Invalid dqCount value
 
   // ** Variables supplied by user
   Time m_sUpdate;                               //!< Start time of the update timer
@@ -174,7 +174,7 @@ private:
   double m_routerBusyTime;                      //!< Router's Busy time (required for Self tuning PIE)
 };
 
-};   // namespace ns3
+}    // namespace ns3
 
 #endif
 
