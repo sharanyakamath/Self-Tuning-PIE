@@ -140,6 +140,14 @@ private:
   double m_a;                                   //!< Parameter to pie controller
   double m_b;                                   //!< Parameter to pie controller
   uint32_t m_dqThreshold;                       //!< Minimum queue size in bytes before dequeue rate is measured
+  bool m_stpie;                                  //!< Boolean variable to enable/disable STPI feature
+  double m_stpieBeta;                            //!< Beta used for Self tuning PIE
+  double m_stpieRtt;                             //!< RTT used for Self tuning PIE
+  double m_knrc;                                //!< EWMA constant for estimation of N/RC in Self tuning PIE
+  double m_kc;                                  //!< EWMA constant for capacity estimation in Self tuning PIE
+  double m_w;                                   //!< Sampling frequency (Number of times per second)
+  double m_ki;                                  //!< Ki parameter of Self tuning PIE
+  double m_kp;                                  //!< Kp parameter of Self tuning PIE
 
   // ** Variables maintained by PIE
   double m_dropProb;                            //!< Variable used in calculation of drop probability
@@ -154,6 +162,17 @@ private:
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
   EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
   Ptr<UniformRandomVariable> m_uv;              //!< Rng stream
+  TracedValue<double> m_thc;                                 //!< Estimated capacity in Self tuning PIE
+  double m_oldThc;                              //!< Old value of estimated capacity in Self tuning PIE
+  double m_nrc;                                 //!< New value of N/RC
+  double m_oldNrc;                              //!< Old value of N/RC
+  double m_thnrc;                               //!< Estimated N/RC in Self tuning PIE
+  double m_oldThnrc;                            //!< Old value of estimated N/RC in Self tuning PIE
+  double m_capacity;                            //!< Sampled capacity in Self tuning PIE
+  double m_oldCapacity;                         //!< Old value of sampled capacity in Self tuning PIE
+  double m_kpi;
+  uint32_t m_deptBytes;                         //!< Departed bytes (required for Self tuning PIE)
+  double m_routerBusyTime;                      //!< Router's Busy time (required for Self tuning PIE)
 };
 
 };   // namespace ns3
