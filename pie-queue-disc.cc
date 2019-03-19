@@ -303,7 +303,7 @@ void PieQueueDisc::CalculateP ()
       double T = 1 / m_w;
       if (m_routerBusyTime > 0)
         {
-          m_capacity = double (m_deptBytes) / m_routerBusyTime;
+          m_capacity = double (m_dqCount) / m_routerBusyTime;
 //          m_thc = (2 * m_kc - T) / (2 * m_kc + T) * m_oldThc + T / (2 * m_kc + T) * (m_oldCapacity + m_capacity);
           if (m_thc > 0)
             {
@@ -334,7 +334,7 @@ void PieQueueDisc::CalculateP ()
               m_oldThc = m_thc;
               m_oldThnrc = m_thnrc;
               m_oldNrc = m_nrc;
-              m_deptBytes = 0;
+              //m_dqCount = 0;
               //m_dropProb = p;
             }
         }

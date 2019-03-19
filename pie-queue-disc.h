@@ -171,7 +171,6 @@ private:
   double m_capacity;                            //!< Sampled capacity in Self tuning PIE
   double m_oldCapacity;                         //!< Old value of sampled capacity in Self tuning PIE
   double m_kpi;
-  uint32_t m_deptBytes;                         //!< Departed bytes (required for Self tuning PIE)
   double m_routerBusyTime;                      //!< Router's Busy time (required for Self tuning PIE)
 };
 
