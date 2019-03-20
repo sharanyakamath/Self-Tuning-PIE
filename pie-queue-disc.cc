@@ -291,6 +291,7 @@ void PieQueueDisc::CalculateP ()
     {
       m_dropProb = 0;
     }
+       //Self-Tuning-PIE
   else if (m_stpie)
     {
       // Calculate Capacity
@@ -299,7 +300,6 @@ void PieQueueDisc::CalculateP ()
       if (m_routerBusyTime.GetSeconds() > 0)
         {
           m_capacity = double (m_dqCount) / m_routerBusyTime.GetSeconds();
-//          m_thc = (2 * m_kc - T) / (2 * m_kc + T) * m_oldThc + T / (2 * m_kc + T) * (m_oldCapacity + m_capacity);
           if (m_thc > 0)
             {
               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
@@ -322,15 +322,13 @@ void PieQueueDisc::CalculateP ()
               // Calculate values of A and B
               m_a = m_kpi * (1 / z + T / 2);
               m_b = m_kpi * (1 / z - T / 2);
-              //m_aTrace = m_a;
-              //m_bTrace = m_b;
+
               p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
 
               m_oldThc = m_thc;
               m_oldThnrc = m_thnrc;
               m_oldNrc = m_nrc;
-              //m_dqCount = 0;
-              //m_dropProb = p;
+
             }
         }
     }
