@@ -295,11 +295,10 @@ void PieQueueDisc::CalculateP ()
   else if (m_stpie)
     {
       // Calculate Capacity
-      m_routerBusyTime = m_tUpdate;
       double T = m_tUpdate.GetSeconds();
-      if (m_routerBusyTime.GetSeconds() > 0)
+      if (m_tUpdate.GetSeconds() > 0)
         {
-          m_capacity = double (m_dqCount) / m_routerBusyTime.GetSeconds();
+          m_capacity = double (m_dqCount) / m_tUpdate.GetSeconds();
           if (m_thc > 0)
             {
               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
