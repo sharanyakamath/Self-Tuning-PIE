@@ -112,11 +112,6 @@ TypeId PieQueueDisc::GetTypeId (void)
                    DoubleValue (0.0001822),
                    MakeDoubleAccessor (&PieQueueDisc::m_kp),
                    MakeDoubleChecker<double> ())
-    .AddAttribute ("Ki",
-                   "Value of Ki",
-                   DoubleValue (0.0001816),
-                   MakeDoubleAccessor (&PieQueueDisc::m_ki),
-                   MakeDoubleChecker<double> ())
     .AddAttribute ("StpieBeta",
                    "Beta used for Self tuning PIE",
                    DoubleValue (0.5),
@@ -299,7 +294,7 @@ void PieQueueDisc::CalculateP ()
       double T = m_tUpdate.GetSeconds();
       if (m_routerBusyTime.GetSeconds() > 0)
         {
-          m_capacity = double (m_dqCount) / m_routerBusyTime.GetSeconds();
+          m_capacity = double (m_dqCount) / pktSize / m_routerBusyTime.GetSeconds();
           if (m_thc > 0)
             {
               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
