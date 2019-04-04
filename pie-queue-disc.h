@@ -145,7 +145,6 @@ private:
   double m_stpieRtt;                             //!< RTT used for Self tuning PIE
   double m_knrc;                                //!< EWMA constant for estimation of N/RC in Self tuning PIE
   double m_kc;                                  //!< EWMA constant for capacity estimation in Self tuning PIE
-  double m_ki;                                  //!< Ki parameter of Self tuning PIE
   double m_kp;                                  //!< Kp parameter of Self tuning PIE
 
   // ** Variables maintained by PIE
