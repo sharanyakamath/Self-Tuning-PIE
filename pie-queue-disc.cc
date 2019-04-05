@@ -127,12 +127,12 @@ TypeId PieQueueDisc::GetTypeId (void)
                      MakeTraceSourceAccessor (&PieQueueDisc::m_thc),
                      "ns3::TracedValueCallback::Double")
     .AddTraceSource ("Alpha",
-                     "Trace Source for A of PiQueueDisc",
-                     MakeTraceSourceAccessor (&PiQueueDisc::m_aTrace),
+                     "Trace Source for A of PieQueueDisc",
+                     MakeTraceSourceAccessor (&PieQueueDisc::m_aTrace),
                      "ns3::TracedValueCallback::Double")
     .AddTraceSource ("Beta",
-                     "Trace Source for A of PiQueueDisc",
-                     MakeTraceSourceAccessor (&PiQueueDisc::m_bTrace),
+                     "Trace Source for A of PieQueueDisc",
+                     MakeTraceSourceAccessor (&PieQueueDisc::m_bTrace),
                      "ns3::TracedValueCallback::Double")
   ;
 
