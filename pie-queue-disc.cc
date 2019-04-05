@@ -126,6 +126,14 @@ TypeId PieQueueDisc::GetTypeId (void)
                      "Drop probability of PieQueueDisc",
                      MakeTraceSourceAccessor (&PieQueueDisc::m_thc),
                      "ns3::TracedValueCallback::Double")
+    .AddTraceSource ("Alpha",
+                     "Trace Source for A of PiQueueDisc",
+                     MakeTraceSourceAccessor (&PiQueueDisc::m_aTrace),
+                     "ns3::TracedValueCallback::Double")
+    .AddTraceSource ("Beta",
+                     "Trace Source for A of PiQueueDisc",
+                     MakeTraceSourceAccessor (&PiQueueDisc::m_bTrace),
+                     "ns3::TracedValueCallback::Double")
   ;
 
   return tid;
@@ -211,6 +219,8 @@ PieQueueDisc::InitializeParams (void)
   m_dqStart = 0;
   m_burstState = NO_BURST;
   m_qDelayOld = Time (Seconds (0));
+  m_aTrace = m_a;
+  m_bTrace = m_b;
 }
 
 bool PieQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
@@ -316,6 +326,8 @@ void PieQueueDisc::CalculateP ()
               // Calculate values of A and B
               m_a = m_kpi * (1 / z + T / 2);
               m_b = m_kpi * (1 / z - T / 2);
+              m_aTrace = m_a;
+              m_bTrace = m_b;
              
 
               p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
