@@ -171,6 +171,10 @@ private:
   double m_kpi;
   uint32_t m_deptPackets;                         //!< Departed packets (required for Self tuning PIE)
 
+  // TraceSources
+  TracedValue<double> m_aTrace;
+  TracedValue<double> m_bTrace;
+
 };
 
 }    // namespace ns3
