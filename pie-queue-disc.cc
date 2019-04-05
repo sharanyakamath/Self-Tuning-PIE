@@ -94,7 +94,7 @@ TypeId PieQueueDisc::GetTypeId (void)
                    MakeTimeChecker ())
     .AddAttribute ("STPIE",
                    "True to use Self tuning PIE",
-                   BooleanValue (false),
+                   BooleanValue (true),
                    MakeBooleanAccessor (&PieQueueDisc::m_stpie),
                    MakeBooleanChecker ())
     .AddAttribute ("Knrc",
@@ -286,14 +286,14 @@ void PieQueueDisc::CalculateP ()
     {
       m_dropProb = 0;
     }
-       //Self-Tuning-PIE
+  //Self-Tuning-PIE
   else if (m_stpie)
     {
       // Calculate Capacity
       double T = m_tUpdate.GetSeconds();
       if (m_tUpdate.GetSeconds() > 0)
         {
-          m_capacity = double (m_dqCount) / m_tUpdate.GetSeconds();
+          m_capacity = double (m_deptPackets) / m_tUpdate.GetSeconds();
           if (m_thc > 0)
             {
               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
@@ -316,12 +316,14 @@ void PieQueueDisc::CalculateP ()
               // Calculate values of A and B
               m_a = m_kpi * (1 / z + T / 2);
               m_b = m_kpi * (1 / z - T / 2);
+             
 
               p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
 
               m_oldThc = m_thc;
               m_oldThnrc = m_thnrc;
               m_oldNrc = m_nrc;
+              m_deptPackets = 0;
 
             }
         }
@@ -428,6 +430,7 @@ PieQueueDisc::DoDequeue ()
   Ptr<QueueDiscItem> item = GetInternalQueue (0)->Dequeue ();
   double now = Simulator::Now ().GetSeconds ();
   uint32_t pktSize = item->GetSize ();
+  m_deptPackets ++;
 
   // if not in a measurement cycle and the queue has built up to dq_threshold,
   // start the measurement cycle

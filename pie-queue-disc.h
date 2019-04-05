@@ -169,6 +169,8 @@ private:
   double m_capacity;                            //!< Sampled capacity in Self tuning PIE
   double m_oldCapacity;                         //!< Old value of sampled capacity in Self tuning PIE
   double m_kpi;
+  uint32_t m_deptPackets;                         //!< Departed packets (required for Self tuning PIE)
+
 };
 
 }    // namespace ns3
