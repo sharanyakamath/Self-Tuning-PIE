@@ -300,10 +300,10 @@ void PieQueueDisc::CalculateP ()
   else if (m_stpie)
     {
       // Calculate Capacity
-      double T = m_tUpdate.GetSeconds();
-      if (m_tUpdate.GetSeconds() > 0)
+      double T = m_tUpdate.GetSeconds ();
+      if (m_tUpdate.GetSeconds () > 0)
         {
-          m_capacity = double (m_deptPackets) / m_tUpdate.GetSeconds();
+          m_capacity = double (m_deptPackets) / m_tUpdate.GetSeconds ();
           if (m_thc > 0)
             {
               m_thc = m_kc * m_oldThc + (1 - m_kc) * m_capacity;
@@ -328,7 +328,7 @@ void PieQueueDisc::CalculateP ()
               m_b = m_kpi * (1 / z - T / 2);
               m_aTrace = m_a;
               m_bTrace = m_b;
-             
+
 
               p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
 
@@ -442,7 +442,7 @@ PieQueueDisc::DoDequeue ()
   Ptr<QueueDiscItem> item = GetInternalQueue (0)->Dequeue ();
   double now = Simulator::Now ().GetSeconds ();
   uint32_t pktSize = item->GetSize ();
-  m_deptPackets ++;
+  m_deptPackets++;
 
   // if not in a measurement cycle and the queue has built up to dq_threshold,
   // start the measurement cycle
