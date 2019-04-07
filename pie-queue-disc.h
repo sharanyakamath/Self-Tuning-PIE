@@ -160,6 +160,8 @@ private:
   uint64_t m_dqCount;                           //!< Number of bytes departed since current measurement cycle starts
   EventId m_rtrsEvent;                          //!< Event used to decide the decision of interval of drop probability calculation
   Ptr<UniformRandomVariable> m_uv;              //!< Rng stream
+
+  // ** Variables maintained by Self tuning PIE
   TracedValue<double> m_thc;                    //!< Estimated capacity in Self tuning PIE
   double m_oldThc;                              //!< Old value of estimated capacity in Self tuning PIE
   double m_nrc;                                 //!< New value of N/RC
@@ -168,13 +170,12 @@ private:
   double m_oldThnrc;                            //!< Old value of estimated N/RC in Self tuning PIE
   double m_capacity;                            //!< Sampled capacity in Self tuning PIE
   double m_oldCapacity;                         //!< Old value of sampled capacity in Self tuning PIE
-  double m_kpi;									//!< Kpi parameter for Self Tuning PIE
+  double m_kpi;                                 //!< Kpi parameter for Self Tuning PIE
   uint32_t m_deptPackets;                       //!< Departed packets (required for Self tuning PIE)
 
   // TraceSources
-  TracedValue<double> m_aTrace;					//!< Trace source for alpha
-  TracedValue<double> m_bTrace;					//!< Trace source for beta
-
+  TracedValue<double> m_aTrace;                 //!< Trace source for alpha
+  TracedValue<double> m_bTrace;                 //!< Trace source for beta
 };
 
 }    // namespace ns3

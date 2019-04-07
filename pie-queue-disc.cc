@@ -296,10 +296,9 @@ void PieQueueDisc::CalculateP ()
     {
       m_dropProb = 0;
     }
-  //Self-Tuning-PIE
   else if (m_stpie)
     {
-      // Calculate Capacity
+      // Calculate capacity for Self tuning PIE
       double T = m_tUpdate.GetSeconds ();
       if (m_tUpdate.GetSeconds () > 0)
         {
@@ -328,7 +327,6 @@ void PieQueueDisc::CalculateP ()
               m_b = m_kpi * (1 / z - T / 2);
               m_aTrace = m_a;
               m_bTrace = m_b;
-
 
               p = m_a * (qDelay.GetSeconds () - m_qDelayRef.GetSeconds ()) + m_b * (qDelay.GetSeconds () - m_qDelayOld.GetSeconds ());
 
